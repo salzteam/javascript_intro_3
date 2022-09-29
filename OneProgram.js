@@ -1,52 +1,27 @@
-let keyName = (callback) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const name = [
-        "Abigail",
-        "Alexandra",
-        "Alison",
-        "Amanda",
-        "Angela",
-        "Bella",
-        "Carol",
-        "Caroline",
-        "Carolyn",
-        "Deirdre",
-        "Diana",
-        "Elizabeth",
-        "Ella",
-        "Faith",
-        "Olivia",
-        "Penelope",
-      ];
-      const resultSearch = [];
-      for (let i = 0; i <= name.length - 1; i++) {
-        callback(name[i], resultSearch);
-      }
-      if (resultSearch.length == 0) return reject(new Error("Data Not Found!"));
-      return resolve(resultSearch);
-    }, 3000);
-  });
-};
-
-const keySearch = (list, restArr) => {
-  if (list.toLowerCase().indexOf(input.toLowerCase()) > -1) {
-    restArr.push(list);
-    return;
-  }
-};
-
-async function start(key, cb) {
-  if (!key) return console.log("Please Input Name");
+function getAPI(key, cb) {
   if (typeof key !== "string") return console.log("Invalid Input Name!");
   if (typeof cb !== "function") return console.log("Invalid Function!");
-  try {
-    const result = await keyName(cb);
-    console.log(result);
-  } catch (Error) {
-    console.log("ERROR!! Data Not Found");
-  }
+  let list = [];
+  let api = fetch("https://jsonplaceholder.typicode.com/users");
+  api
+    .then((result) => result.json())
+    .then((data) => {
+      data.map((data) => {
+        list.push(data.name);
+      });
+      let resultlist = [];
+      cb(list, resultlist, key);
+    })
+    .catch((err) => console.log(err));
 }
-
-const input = "an";
-start(input, keySearch);
+function callback(list, resultlist, key) {
+  list.map((list, i) => {
+    if (list.toLowerCase().indexOf(key.toLowerCase()) > -1) {
+      resultlist = i + 1 + ". " + list;
+      console.log(resultlist);
+    }
+  });
+  console.log("ERROR!!! Data Not Found!");
+}
+const input = "";
+getAPI(input, callback);
