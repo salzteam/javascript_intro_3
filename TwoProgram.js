@@ -8,7 +8,7 @@ let addAccount = (inputname, inputemail, inputpass) => {
       if (atps < 1 || dots < atps + 2 || dots + 2 >= inputemail.length)
         return reject(new Error("Error Input Data Email!"));
       return resolve(data);
-    }, 1);
+    }, 3000);
   });
 };
 
